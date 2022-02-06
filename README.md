@@ -6,3 +6,4 @@ This is a free open-source e-commerce platform for online merchants.  We provide
 ___
 ### Feature:
     Separation of front and back-end architecture
+    Real-Time Chat for Customer Support

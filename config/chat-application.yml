@@ -1,0 +1,74 @@
+server:
+  shutdown: graceful
+spring:
+  config:
+    name: chat-application.yml
+  profiles:
+    active: prod
+  application:
+    name: mvc
+  servlet:
+    multipart:
+      max-file-size: 1MB
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    timezone: GMT+8
+    serialization:
+      # dont use timestamps
+      write-dates-as-timestamps: true
+    deserialization:
+      adjust-dates-to-context-time-zone: true
+  lifecycle:
+    timeout-per-shutdown-phase: 15s
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      maximum-pool-size: 65
+      minimum-idle: 10
+      connection-test-query: SELECT 1
+      # 连接池泄露检测时间
+      leak-detection-threshold: 180000
+      connection-timeout: 30000
+      validation-timeout: 180000
+      # 连接超时1分钟
+      idle-timeout: 60000
+      # 连接生命时长30分钟
+      max-lifetime: 1800000
+      pool-name: HikariMysql-chat
+      auto-commit: true
+    platform: org.hibernate.dialect.MySQL57Dialect
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/DATABASE?characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&autoReconnect=true&autoReconnectForPools=true&failOverReadOnly=false&allowMultiQueries=true&tinyInt1isBit=false&useUnicode=true
+    username: USERNAME
+    password: PWD
+
+mybatis-plus:
+  mapper-locations: classpath*:/mapper/*.xml
+  typeAliasesPackage: vip.msmhk.common.entity,vip.msmhk.sys.entity,vip.msmhk.user.entity
+  global-config:
+    db-config:
+      id-type: auto
+      insertStrategy: not_null
+      updateStrategy: not_null
+      selectStrategy: not_empty
+      table-prefix: hk_
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+  configuration:
+    map-underscore-to-camel-case: true
+    cache-enabled: false
+logging:
+  config: classpath:logback.xml
+  register-shutdown-hook: true
+  level:
+    vip.msmhk.common.mapper: debug
+    vip.msmhk.mapper: debug
+    vip.msmhk.sys.mapper: debug
+
+system:
+  properties:
+    profileActive: prod
+    nettyPort: 28089
+    websocketPath: /ws
+    rsaPrivateKey: MIICeAIBADANBgkqhkiG9w0BAQEFAASCAmIwggJeAgEAAoGBAMItgKi/T/Mb49iv7T/2oOekpNlqlK4RxJRDZPVBSueavydzxMQZdh+MhPRapfDX5UtPh7bBkfPPe4GaulEUlVf5t2TVJ2ycvpdHjc/xa6UsRtfNWXY3HqlDRgbuRZUjAKqWjy5RwIqBdGXae26OfwGK4r5oWk761+KPZXKrEYINAgMBAAECgYEAthqibJ9uxVpEpnTnFXOgl12rVFNGOLFlIH7L8c5YBzjzSHaj9BzE0PWhwuA4e9Sdr7FYX6bN0E+nTnbjgSLCoul7EVLKX/ED8/3J6l7q8cC14RJkbMlDV4lvGIB0wkBDQLRpWARUZOxAje7gcpxGZhYRU3HGKjNJAWpWSfsrJAECQQDxrLuz3aO42WoqhHnWSYHzfea+HIemPTDvaswdPnsjSTDQ6k3JOuQ/c/L+nNn/zsy5Nc+Ce7sWdsjwqUChReeNAkEAzbAIC/BUk3l16dapg6paSXBXR7YomLGvDgMXOyr19SGCOG2A4rRpKy3D1y+ria10r5cVsBLb7UvL5G2WxWgkgQJBAIgw00Y1LMJKoy16oj5EBlt1I8cWxMrFyQHiqUwBndrwr/XLVDKGYYHwkYsyURd7Lptg26OonnG2Vt5oQuefQTECQGOyjVPsG7KXzvWXHPc63SR3lXam7qqEhYtPKDV/r1Qv98SOH0jDla5eMmzdKFJFhyeNHfAIVB2C/cMs80WgIwECQQC8na4rWkbg+gBizQSmvm82CaYd3nPKBmKwn01RNIxHZWQzD04HNuHH4LjAsu8rYY1ABzp24FBMo/QYnmcoBLed
+#    公钥：MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDCLYCov0/zG+PYr+0/9qDnpKTZapSuEcSUQ2T1QUrnmr8nc8TEGXYfjIT0WqXw1+VLT4e2wZHzz3uBmrpRFJVX+bdk1SdsnL6XR43P8WulLEbXzVl2Nx6pQ0YG7kWVIwCqlo8uUcCKgXRl2ntujn8BiuK+aFpO+tfij2VyqxGCDQIDAQAB
